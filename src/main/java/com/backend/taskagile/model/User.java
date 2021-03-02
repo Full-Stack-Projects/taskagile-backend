@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -17,14 +18,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
+    @NotBlank
     private String firstName;
     @Column
+    @NotBlank
     private String lastName;
     @Column
+    @NotBlank
     private String email;
     @Column
+    @NotBlank
     private String username;
     @Column
+    @NotBlank
     private String password;
 
     public User(String firstName,
