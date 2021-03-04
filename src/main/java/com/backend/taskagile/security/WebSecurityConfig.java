@@ -12,17 +12,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                    .antMatchers("/v1/registration")
-                    .permitAll()
-                .anyRequest()
-                .authenticated().and()
-                .httpBasic();
-    }
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http
+        .csrf().disable()
+        .authorizeRequests()
+        .antMatchers("/users/v1/registration")
+        .permitAll()
+        .anyRequest()
+        .authenticated().and()
+        .httpBasic();
+  }
 }

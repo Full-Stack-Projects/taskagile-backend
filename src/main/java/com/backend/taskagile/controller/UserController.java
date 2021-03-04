@@ -1,30 +1,28 @@
 package com.backend.taskagile.controller;
 
-import com.backend.taskagile.exception.FieldValidationException;
+import com.backend.taskagile.dto.UserDto;
 import com.backend.taskagile.model.User;
 import com.backend.taskagile.service.UserService;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/v1")
-@Validated
+@RequestMapping("/users/v1")
 public class UserController {
 
-    private UserService userService;
+  private UserService userService;
 
-    @PostMapping("/registration")
-    public ResponseEntity<User> registerUser(@Valid @RequestBody User user) throws Exception {
-            User newUser = userService.
-                    register(user);
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-
-    }
+  @PostMapping("/registration")
+  public ResponseEntity<Void> registerUser(@Valid @RequestBody UserDto user) throws Exception {
+    userService.register(user);
+    return new ResponseEntity<>(HttpStatus.CREATED);
+  }
 }

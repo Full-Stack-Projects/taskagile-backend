@@ -1,40 +1,45 @@
 package com.backend.taskagile.service;
 
-import com.backend.taskagile.exception.FieldAvailableException;
-import com.backend.taskagile.exception.FieldValidationException;
+import com.backend.taskagile.dto.UserDto;
+import com.backend.taskagile.exception.UserAlreadyExistsException;
 import com.backend.taskagile.model.User;
 import com.backend.taskagile.repository.UserRepository;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    public User register(User user) throws Exception {
-        if(checkUsernameAvailable(user) && checkEmailAvailable(user)){
-            return userRepository.save(user);
-        }
-        return user;
+  public void register(UserDto user) throws Exception {
+    if (checkUsernameAvailable(user) && checkEmailAvailable(user)) {
+      User newUser = User.builder()
+          .firstName(user.getFirstName())
+          .lastName(user.getLastName())
+          .email(user.getEmail())
+          .username(user.getUsername())
+          .password(user.getPassword())
+          .build();
+      userRepository.save(newUser);
     }
+  }
 
-    private boolean checkUsernameAvailable(User user) throws Exception{
-        Optional<User> userFound = userRepository.findByUsername(user.getUsername());
-        if(userFound.isPresent()){
-            throw new FieldAvailableException("Username not available");
-        }
-        return true;
+  private boolean checkUsernameAvailable(UserDto user) throws Exception {
+    Optional<User> userFound = userRepository.findByUsername(user.getUsername());
+    if (userFound.isPresent()) {
+      throw new UserAlreadyExistsException("Username not available");
     }
+    return true;
+  }
 
-    private boolean checkEmailAvailable(User user) throws Exception{
-        Optional<User> userFound = userRepository.findByEmail(user.getEmail());
-        if(userFound.isPresent()){
-            throw new FieldAvailableException("Email not available");
-        }
-        return true;
+  private boolean checkEmailAvailable(UserDto user) throws Exception {
+    Optional<User> userFound = userRepository.findByEmail(user.getEmail());
+    if (userFound.isPresent()) {
+      throw new UserAlreadyExistsException("Email not available");
     }
+    return true;
+  }
 }
