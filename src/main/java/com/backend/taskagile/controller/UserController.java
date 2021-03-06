@@ -1,13 +1,11 @@
 package com.backend.taskagile.controller;
 
 import com.backend.taskagile.dto.UserDto;
-import com.backend.taskagile.model.User;
 import com.backend.taskagile.service.UserService;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

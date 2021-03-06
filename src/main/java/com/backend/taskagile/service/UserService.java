@@ -14,7 +14,7 @@ public class UserService {
 
   private final UserRepository userRepository;
 
-  public void register(UserDto user) throws Exception {
+  public void register(UserDto user) throws UserAlreadyExistsException {
     if (checkUsernameAvailable(user) && checkEmailAvailable(user)) {
       User newUser = User.builder()
           .firstName(user.getFirstName())
@@ -27,7 +27,7 @@ public class UserService {
     }
   }
 
-  private boolean checkUsernameAvailable(UserDto user) throws Exception {
+  private boolean checkUsernameAvailable(UserDto user) throws UserAlreadyExistsException {
     Optional<User> userFound = userRepository.findByUsername(user.getUsername());
     if (userFound.isPresent()) {
       throw new UserAlreadyExistsException("Username not available");
@@ -35,7 +35,7 @@ public class UserService {
     return true;
   }
 
-  private boolean checkEmailAvailable(UserDto user) throws Exception {
+  private boolean checkEmailAvailable(UserDto user) throws UserAlreadyExistsException {
     Optional<User> userFound = userRepository.findByEmail(user.getEmail());
     if (userFound.isPresent()) {
       throw new UserAlreadyExistsException("Email not available");
