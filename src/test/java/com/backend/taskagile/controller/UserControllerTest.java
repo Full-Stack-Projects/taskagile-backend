@@ -10,6 +10,7 @@ import com.backend.taskagile.dto.UserDto;
 import com.backend.taskagile.exception.UserAlreadyExistsException;
 import com.backend.taskagile.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,31 @@ class UserControllerTest {
   }
 
   @Test
-  public void registerExistingUser() throws Exception {
+  @DisplayName("test register user when username already exists")
+  public void testRegisterExistingUser() throws Exception {
+    UserDto userTest = UserDto.builder()
+        .firstName("Pablo")
+        .lastName("Valdes")
+        .email("pablov@mail.com")
+        .username("pabloVal")
+        .password("123456").build();
+
+    doThrow(UserAlreadyExistsException.class)
+        .when(serviceMock)
+        .register(any(UserDto.class));
+
+    ObjectMapper mapper = new ObjectMapper();
+    String requestJson = mapper.writeValueAsString(userTest);
+
+    mvc.perform(post("/users/v1/registration")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(requestJson))
+        .andExpect(status().is(409));
+  }
+
+  @Test
+  @DisplayName("test register user when email already exists")
+  public void testRegisterExistingEmail() throws Exception {
     UserDto userTest = UserDto.builder()
         .firstName("Pablo")
         .lastName("Valdes")
