@@ -70,5 +70,21 @@ class UserServiceTest {
     verify(userRepository, never()).save(any(User.class));
   }
 
+  @Test
+  @DisplayName("test register user when email already exists")
+  void testRegisterWhenEmailExists() {
+    UserDto userDto = userDtoStub();
+
+    when(userRepository.findByEmail(userEmailForTest))
+        .thenReturn(Optional.ofNullable(new User()));
+
+    UserAlreadyExistsException exception = assertThrows(UserAlreadyExistsException.class,
+        () -> userService.register(userDto));
+
+    assertThat(exception.getMessage()).isEqualTo("Email not available");
+    verify(userRepository, times(1)).findByEmail(userEmailForTest);
+    verify(userRepository, never()).save(any(User.class));
+  }
+
 
 }

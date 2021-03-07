@@ -1,5 +1,7 @@
 package com.backend.taskagile.controller;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -19,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 
 @ExtendWith(SpringExtension.class)
@@ -33,7 +36,7 @@ class UserControllerTest {
 
   @Test
   void registerUserFailedBlank() throws Exception {
-
+    
     mvc.perform(post("/users/v1/registration"))
         .andExpect(status().is(400));
   }
@@ -63,29 +66,6 @@ class UserControllerTest {
   @Test
   @DisplayName("test register user when username already exists")
   public void testRegisterExistingUser() throws Exception {
-    UserDto userTest = UserDto.builder()
-        .firstName("Pablo")
-        .lastName("Valdes")
-        .email("pablov@mail.com")
-        .username("pabloVal")
-        .password("123456").build();
-
-    doThrow(UserAlreadyExistsException.class)
-        .when(serviceMock)
-        .register(any(UserDto.class));
-
-    ObjectMapper mapper = new ObjectMapper();
-    String requestJson = mapper.writeValueAsString(userTest);
-
-    mvc.perform(post("/users/v1/registration")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(requestJson))
-        .andExpect(status().is(409));
-  }
-
-  @Test
-  @DisplayName("test register user when email already exists")
-  public void testRegisterExistingEmail() throws Exception {
     UserDto userTest = UserDto.builder()
         .firstName("Pablo")
         .lastName("Valdes")
