@@ -1,11 +1,9 @@
 package com.backend.taskagile.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.backend.taskagile.dto.UserDto;
@@ -33,13 +31,14 @@ class UserControllerTest {
   private UserService serviceMock;
 
   @Test
-  void registerUserFailedBlank() throws Exception{
+  void registerUserFailedBlank() throws Exception {
+
     mvc.perform(post("/users/v1/registration"))
         .andExpect(status().is(400));
   }
 
   @Test
-  public void registerUserSucceed() throws Exception{
+  public void registerUserSucceed() throws Exception {
 
     UserDto userTest = UserDto.builder()
         .firstName("Pablo")
@@ -55,13 +54,13 @@ class UserControllerTest {
     String requestJson = mapper.writeValueAsString(userTest);
 
     mvc.perform(post("/users/v1/registration")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(requestJson))
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(requestJson))
         .andExpect(status().isCreated());
   }
 
   @Test
-  public void registerExistingUser() throws Exception{
+  public void registerExistingUser() throws Exception {
     UserDto userTest = UserDto.builder()
         .firstName("Pablo")
         .lastName("Valdes")
