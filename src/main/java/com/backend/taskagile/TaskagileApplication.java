@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TaskagileApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(TaskagileApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(TaskagileApplication.class, args);
+  }
 
 }
