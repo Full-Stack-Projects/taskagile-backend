@@ -2,6 +2,7 @@ package com.backend.taskagile.service;
 
 import com.backend.taskagile.dto.UserDto;
 import com.backend.taskagile.exception.UserAlreadyExistsException;
+import com.backend.taskagile.mail.EmailSender;
 import com.backend.taskagile.model.User;
 import com.backend.taskagile.repository.UserRepository;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final EmailSender emailSender;
 
   public void register(UserDto user) throws UserAlreadyExistsException {
     if (checkUsernameAvailable(user) && checkEmailAvailable(user)) {
@@ -24,6 +26,10 @@ public class UserService {
           .password(user.getPassword())
           .build();
       userRepository.save(newUser);
+
+      emailSender.send(newUser.getEmail(),
+          "Welcome " + newUser.getFirstName() + ", "
+              + "You've already registered with successful on TaskAgile");
     }
   }
 
