@@ -1,18 +1,22 @@
 package com.backend.taskagile.service;
 
 import com.backend.taskagile.dto.UserDto;
+import com.backend.taskagile.event.EmailEvent;
 import com.backend.taskagile.exception.UserAlreadyExistsException;
 import com.backend.taskagile.model.User;
 import com.backend.taskagile.repository.UserRepository;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class UserService {
 
+  private ApplicationEventPublisher applicationEventPublisher;
   private final UserRepository userRepository;
+  //private final EmailSender emailSender;
 
   public void register(UserDto user) throws UserAlreadyExistsException {
     if (checkUsernameAvailable(user) && checkEmailAvailable(user)) {
@@ -24,6 +28,10 @@ public class UserService {
           .password(user.getPassword())
           .build();
       userRepository.save(newUser);
+
+      EmailEvent emailEvent = new EmailEvent(this,newUser);
+
+      applicationEventPublisher.publishEvent(emailEvent);
     }
   }
 
