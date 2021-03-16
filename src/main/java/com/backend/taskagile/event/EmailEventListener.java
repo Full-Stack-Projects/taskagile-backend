@@ -15,7 +15,6 @@ public class EmailEventListener {
   public void handleEvent(EmailEvent event) {
     emailSender.send(event.getUser().getEmail(),
         buildEmail(event.getUser().getFirstName()));
-
   }
 
   private String buildEmail(String name) {

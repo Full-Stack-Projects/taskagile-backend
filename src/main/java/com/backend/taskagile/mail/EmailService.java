@@ -24,10 +24,11 @@ public class EmailService implements EmailSender {
     try {
       MimeMessage mimeMessage = javaMailSender.createMimeMessage();
       MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
       helper.setText(mail, true);
       helper.setTo(to);
       helper.setSubject("Welcome to TaskAgile");
-      helper.setFrom("taskagile@mail.com");
+      helper.setFrom("gerfriend1@gmail.com");
       javaMailSender.send(mimeMessage);
     } catch (MessagingException e) {
       LOGGER.error("Failed to send email", e);
