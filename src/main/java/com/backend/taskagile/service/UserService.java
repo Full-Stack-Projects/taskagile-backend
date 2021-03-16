@@ -16,7 +16,6 @@ public class UserService {
 
   private ApplicationEventPublisher applicationEventPublisher;
   private final UserRepository userRepository;
-  //private final EmailSender emailSender;
 
   public void register(UserDto user) throws UserAlreadyExistsException {
     if (checkUsernameAvailable(user) && checkEmailAvailable(user)) {
@@ -29,7 +28,7 @@ public class UserService {
           .build();
       userRepository.save(newUser);
 
-      EmailEvent emailEvent = new EmailEvent(this,newUser);
+      EmailEvent emailEvent = new EmailEvent(newUser);
 
       applicationEventPublisher.publishEvent(emailEvent);
     }

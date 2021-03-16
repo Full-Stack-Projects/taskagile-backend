@@ -1,13 +1,11 @@
 package com.backend.taskagile.event;
 
 import com.backend.taskagile.model.User;
-import org.springframework.context.ApplicationEvent;
 
-public class EmailEvent extends ApplicationEvent {
+public class EmailEvent {
 
   private User user;
-  public EmailEvent(Object source,User user) {
-    super(source);
+  public EmailEvent(User user) {
     this.user = user;
   }
 
